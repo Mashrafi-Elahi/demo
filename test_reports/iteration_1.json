@@ -1,0 +1,31 @@
+{
+  "summary": "First testing iteration for PROHORI (MFS fraud guard). Backend: all 23 pytest tests PASS (100%). Frontend: all 6 grouped end-to-end flows PASS (100%) at 390x844 viewport. Verified onboarding->home, simulate SMS->alert (title+amount visible), confirm-mine, report path->complaint/new->sample->analyse->review->send->sent-screen (reference PRH- shown), sent-home->home, Check tab (three demo chips produce reported/caution/safe with high-risk badge), Reports tab (provider filter chips bKash/Nagad/Rocket), Settings tab (My complaints list shows new PRH- complaint with 'Sent' badge), and reset-demo (clears complaints, re-seeds). AI extract endpoints correctly return ai:false via demo parser (Emergent LLM key inactive as expected). /api/tts and /api/transcribe correctly return 502 as expected - UI shows 'Request failed (502)' toast, does not crash. No deprecated Expo packages detected (no expo-av / expo-barcode-scanner / expo-background-fetch).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_prohori_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "No functional bugs found. Emergent LLM key is inactive (expected per problem statement), so /api/tts and /api/transcribe return 502 - if voice features need to be demoed, the LLM key budget must be refilled. Extract endpoints already fall back cleanly via demo_extract/DEMO_SCREENSHOT with ai:false."
+  ],
+  "critical_code_review_comments": [
+    "server.py: uses deprecated FastAPI @app.on_event('startup'/'shutdown') decorators. Not breaking today, but consider migrating to lifespan handlers.",
+    "server.py stats endpoint uses list comprehension with async generator - correct but could use aggregation for perf on large datasets (non-issue for prototype).",
+    "MongoDB _id is properly excluded via PyObjectId + BeforeValidator pattern - good."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_prohori_api.py (created)"
+  ],
+  "success_rate": {"backend": "100% (23/23)", "frontend": "100% (6/6 grouped flows covering all requested testIDs)"},
+  "seed_data_creation": "Backend auto-seeds 6 transactions + 5 fraud numbers + 8 community reports on startup. Tests call /api/reset-demo before each module to guarantee a clean seeded state.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Frontend has duplicate testIDs in DOM because Expo Router keeps previous route mounted (hidden). Always use ':visible' CSS filter or .last()/first() with visibility checks when selecting: e.g. page.locator('[data-testid=\"tab-check\"]:visible').first.click(force=True). Reset backend state via curl POST /api/reset-demo before each run. TTS/transcribe expected 502 due to inactive Emergent LLM key - do not treat as failure.",
+  "rca_of_issue": "N/A - no bugs. Note: The initial run showed apparent 'FAIL: Element is not visible' for tabs because Playwright resolved 2 elements per testID (one hidden due to Expo Router route retention). Fixed in test script by using ':visible' pseudo-selector; not a product bug."
+}

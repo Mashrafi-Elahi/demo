@@ -1,0 +1,193 @@
+{
+  "app_name": "PROHORI",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "A calm, highly readable, and trustworthy mobile interface prioritizing user safety without instilling panic.",
+  "color": {
+    "surface": "#FFFFFF",
+    "onSurface": "#1C1C1E",
+    "surfaceSecondary": "#F2F2F7",
+    "onSurfaceSecondary": "#3A3A3C",
+    "surfaceTertiary": "#E5E5EA",
+    "onSurfaceTertiary": "#636366",
+    "surfaceInverse": "#1C1C1E",
+    "onSurfaceInverse": "#FFFFFF",
+    "brand": "#2F5D46",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#2F5D46",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#467A5F",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#EAF2EE",
+    "onBrandTertiary": "#2F5D46",
+    "success": "#34C759",
+    "onSuccess": "#FFFFFF",
+    "warning": "#FF9F0A",
+    "onWarning": "#FFFFFF",
+    "error": "#FF3B30",
+    "onError": "#FFFFFF",
+    "info": "#EAF2EE",
+    "onInfo": "#2F5D46",
+    "border": "#E5E5EA",
+    "borderStrong": "#C7C7CC",
+    "divider": "#F2F2F7",
+    "muted": "#8E8E93"
+  },
+  "typography": {
+    "displayFontFamily": "Noto Sans Bengali",
+    "textFontFamily": "Noto Sans Bengali",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous vertical breathing room. Use 'lg' and 'xl' rhythm. Ensure safe area at top and bottom.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": 1,
+  "navigation": "bottom_tabs",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use on bottom tab bar",
+      "Use on floating action buttons (FAB)",
+      "Sticky headers over scrolling content",
+      "Bottom-sheet handles"
+    ],
+    "dont's": [
+      "Never blur form fields",
+      "Avoid on list rows and cards in dense lists"
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "haptics": {
+    "primary_button": "impactMedium",
+    "tab_press": "selection",
+    "toggle_switch": "selection",
+    "alert_trigger": "notificationWarning",
+    "success_toast": "notificationSuccess"
+  },
+  "screens": [
+    {
+      "name": "Onboarding",
+      "purpose": "Explain SMS permission and app value cleanly before prompting for access.",
+      "states": {
+        "loading": "Centered spinner",
+        "empty": "N/A",
+        "error": "N/A"
+      },
+      "layout": "Full-bleed illustration at the top with a subtle bottom gradient fade into solid surface. Large heading, brief description, and a sticky primary button at the bottom for permissions."
+    },
+    {
+      "name": "HomeDashboard",
+      "purpose": "Provide at-a-glance wallet protection status, recent transactions, and active alerts.",
+      "states": {
+        "loading": "Skeleton cards for transactions and status",
+        "empty": "Illustration of a shield with 'No recent transactions to monitor' message.",
+        "error": "Failed to fetch data message with a Retry button."
+      },
+      "layout": "Priority-first single column: A hero 'Status Card' at the top (shield icon, 'Monitoring Active' text, soft green tint). Below: Section title 'Recent Alerts' followed by a horizontal scroll of warning cards, then a vertical list view of 'Recent Transactions'. Minimal chrome, focus on the data."
+    },
+    {
+      "name": "SuspiciousAlert",
+      "purpose": "Interrupt flow to warn user of potential fraud with voice alert support.",
+      "states": {
+        "loading": "N/A",
+        "empty": "N/A",
+        "error": "N/A"
+      },
+      "layout": "Modal/Sheet presentation. Uses error/warning colors sparingly (e.g., as icon background). Prominent warning icon, large text showing transaction details. Two clear actions: 'Yes, it was me' (secondary button) and 'No, report this' (primary, red-tinted). A prominent button to play the Bangla voice alert."
+    },
+    {
+      "name": "ComplaintFiling",
+      "purpose": "Allow users to submit a complaint via voice recording or screenshot upload.",
+      "states": {
+        "loading": "Processing AI extraction overlay.",
+        "empty": "Start state with clear upload and record buttons.",
+        "error": "OCR/Voice failed to process, retry button."
+      },
+      "layout": "Simple dual-action layout. A large microphone button (FAB style) for voice, and an 'Upload Screenshot' card below it. Voice recording shows an active waveform animation using react-native-reanimated."
+    },
+    {
+      "name": "ExtractedReview",
+      "purpose": "Review AI-extracted details (amount, ID, wallet) and auto-drafted complaint before sending.",
+      "states": {
+        "loading": "Drafting complaint...",
+        "empty": "N/A",
+        "error": "Error generating draft."
+      },
+      "layout": "Form-like review screen. Read-only fields for extracted data (TrxID, Amount) with an 'Edit' option. A card showing the auto-drafted text. Sticky 'Send Complaint' button at the bottom. Includes a 'Readback' icon button."
+    },
+    {
+      "name": "NumberCheck",
+      "purpose": "Check a recipient number against the shared fraud DB before sending money.",
+      "states": {
+        "loading": "Checking database...",
+        "empty": "Enter a number to see its safety rating.",
+        "error": "Network error, couldn't verify."
+      },
+      "layout": "Large text input for phone number. A prominent 'Check Number' button. Result displayed as a colored card (Green for safe, Yellow for caution, Red for reported) with dynamic icons and text."
+    },
+    {
+      "name": "FraudMap",
+      "purpose": "View community reports and high-risk wallet flags.",
+      "states": {
+        "loading": "Loading recent reports...",
+        "empty": "No recent fraud reports in your area.",
+        "error": "Failed to load community feed."
+      },
+      "layout": "List view of recent anonymized fraud reports. Each row shows the scam type, time, and a masked number. Uses 'brandTertiary' background for the list item container to give a soft, native feel."
+    }
+  ],
+  "images": {
+    "hero_shield": {
+      "url": "https://images.unsplash.com/photo-1585842630086-17ecd5af4496?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwc2VjdXJpdHklMjBzaGllbGQlMjBpY29ufGVufDB8fHx8MTc5MDc4NDAzMHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Minimalist security shield icon"
+    },
+    "empty_padlock": {
+      "url": "https://images.unsplash.com/photo-1614064745737-b70184a320d8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwxfHxlbXB0eSUyMHN0YXRlJTIwaWxsdXN0cmF0aW9uJTIwc2VjdXJpdHl8ZW58MHx8fHwxNzkwNzg0MDMwfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Padlock representing security"
+    },
+    "scam_warning": {
+      "url": "https://images.unsplash.com/photo-1578986568309-707ef1017f69?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxzY2FtJTIwYWxlcnQlMjBpY29ufGVufDB8fHx8MTc5MDc4NDA0MXww&ixlib=rb-4.1.0&q=85",
+      "alt": "Scam alert warning sign"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Adhere strictly to the iOS-Native Clean (1) personality: generative margins, clean rounded cards (md radius), subtle shadows, and highly legible text.",
+    "Implement the 'Both side by side' language requirement seamlessly. Ensure Bengali texts use the `Noto Sans Bengali` font properly, and pair them with English counterparts using clear hierarchy.",
+    "Use Forest Green (`#2F5D46`) as the core brand color to convey security. Absolutely no blues, purples, or default Material indigo.",
+    "Since it's an Android-first prototype, use standard Material navigational elements where native, but style them cleanly like iOS (no heavy drop shadows, no harsh app bars). Use Gorhom Bottom Sheet for the Complaint extraction and Number check features.",
+    "The Suspicious Alert screen must have an aggressive layout to grab attention but use the warning/error colors sparingly as icon backgrounds or button backgrounds, maintaining readability.",
+    "Incorporate the required AI voice readback feature and Voice complaint feature using clear, oversized FABs or action buttons for recording, making it extremely obvious and easy to tap.",
+    "For the realistic demo data, since MFS logos (bKash, Nagad) couldn't be fetched via Unsplash, use initials (e.g., 'bK', 'NG') in colored circular avatars (`brandTertiary` with `brandPrimary` text) as fallbacks.",
+    "All screens must handle loading, empty, and error states gracefully as spec'd."
+  ]
+}
